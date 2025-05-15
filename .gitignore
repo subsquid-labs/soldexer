@@ -1,0 +1,10 @@
+.idea
+.yarn
+node_modules
+*.sqlite*
+*.db
+*.db-shm
+*.db-wal
+.env
+ch_data
+.DS_Store
