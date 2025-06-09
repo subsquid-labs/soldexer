@@ -1,7 +1,6 @@
 import path from 'node:path';
 import { createClickhouseClient, ensureTables } from './clickhouse';
-import { ClickhouseState } from './core/states/clickhouse_state';
-import { SolanaSwapsStream } from './streams/solana_swaps/solana_swaps';
+import { SolanaSwapsStream, ClickhouseState } from '@sqd-pipes/streams';
 import { createLogger, getSortFunction } from './utils';
 
 const TRACKED_TOKENS = [
@@ -28,9 +27,9 @@ async function main() {
    * - Meteora
    */
   const ds = new SolanaSwapsStream({
-    portal: 'https://portal.sqd.dev/datasets/solana-beta',
+    portal: 'https://portal.sqd.dev/datasets/solana-mainnet',
     blockRange: {
-      from: process.env.FROM_BLOCK || 332557468,
+      from: process.env.FROM_BLOCK || 317617480,
       to: process.env.TO_BLOCK,
     },
     args: {
@@ -79,6 +78,7 @@ async function main() {
             transaction_hash: s.transaction.hash,
             transaction_index: s.transaction.index,
             instruction_address: s.instruction.address,
+            pool_address: s.poolAddress,
             account: s.account,
             token_a: tokenA.mint,
             token_b: tokenB.mint,

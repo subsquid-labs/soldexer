@@ -10,8 +10,7 @@
   "packageManager": "yarn@4.5.1",
   "dependencies": {
     "@clickhouse/client": "^1.10.1",
-    "@subsquid/portal-client": "0.0.1-portal-api.da1f68",
-    "@subsquid/solana-stream": "1.0.0-portal-api.da1f68",
+    "@sqd-pipes/streams": "0.0.4",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0"
   }

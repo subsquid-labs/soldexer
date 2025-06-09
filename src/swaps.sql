@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS solana_swaps_raw
 (
     timestamp           DateTime CODEC (DoubleDelta, ZSTD),
     dex                 LowCardinality(String),
+    pool_address        String,
     token_a             String,
     token_b             String,
     amount_a            Float64,
