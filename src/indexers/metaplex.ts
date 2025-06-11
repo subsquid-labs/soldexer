@@ -1,17 +1,17 @@
 import path from 'node:path';
 import { ClickhouseState } from '@sqd-pipes/core';
-import { createClickhouseClient, ensureTables } from "../db/clickhouse";
+import { ensureTables } from "../db/clickhouse";
 import { SolanaMetaplexStream } from '../streams/metaplex';
 import { logger } from '../utils';
+import { IndexerFunction, PipeConfig } from '../main';
+import { NodeClickHouseClient } from '@clickhouse/client/dist/client';
 
-export async function metaplexIndexer() {
-  const clickhouse = createClickhouseClient()
-
+export const metaplexIndexer: IndexerFunction = async (portalUrl: string, clickhouse: NodeClickHouseClient, config: PipeConfig) => {
   const ds = new SolanaMetaplexStream({
-    portal: process.env.PORTAL_URL || 'https://portal.sqd.dev/datasets/solana-beta',
+    portal: `${portalUrl}/datasets/solana-beta`,
     blockRange: {
-      from: process.env.METAPLEX_FROM_BLOCK || 332557468,
-      to: process.env.METAPLEX_TO_BLOCK,
+      from: config.fromBlock,
+      to: config.toBlock,
     },
     state: new ClickhouseState(clickhouse, {
       table: 'solana_sync_status',

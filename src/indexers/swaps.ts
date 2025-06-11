@@ -1,8 +1,10 @@
 import path from 'node:path';
-import { createClickhouseClient, ensureTables } from '../db/clickhouse';
+import { ensureTables } from '../db/clickhouse';
+import { NodeClickHouseClient } from '@clickhouse/client/dist/client';
 import { ClickhouseState } from '@sqd-pipes/core';
 import { SolanaSwapsStream } from '../streams/swaps';
 import { logger, getSortFunction } from '../utils';
+import { IndexerFunction, PipeConfig } from '../main';
 
 const TRACKED_TOKENS = [
   'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
@@ -16,9 +18,7 @@ const TRACKED_TOKENS = [
  */
 const sortTokens = getSortFunction(TRACKED_TOKENS);
 
-export async function swapsIndexer() {
-  const clickhouse = createClickhouseClient();
-
+export const swapsIndexer: IndexerFunction = async (portalUrl: string, clickhouse: NodeClickHouseClient, config: PipeConfig) => {
   /**
    * Create a stream to read swaps from the Solana blockchain
    * from 3 different DEXs:
@@ -27,10 +27,10 @@ export async function swapsIndexer() {
    * - Meteora
    */
   const ds = new SolanaSwapsStream({
-    portal: process.env.PORTAL_URL || 'https://portal.sqd.dev/datasets/solana-beta',
+    portal: `${portalUrl}/datasets/solana-beta`,
     blockRange: {
-      from: process.env.SWAPS_FROM_BLOCK || 332557468,
-      to: process.env.SWAPS_TO_BLOCK,
+      from: config.fromBlock,
+      to: config.toBlock,
     },
     args: {
       tokens: TRACKED_TOKENS,

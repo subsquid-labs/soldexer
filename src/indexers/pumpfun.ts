@@ -1,17 +1,17 @@
 import path from 'node:path';
 import { ClickhouseState } from '@sqd-pipes/core';
 import { SolanaPumpfunTokensStream } from '../streams/pumpfun';
-import { ensureTables, createClickhouseClient } from '../db/clickhouse'
+import { NodeClickHouseClient } from '@clickhouse/client/dist/client';
+import { ensureTables } from '../db/clickhouse'
 import { logger } from '../utils/logger';
+import { IndexerFunction, PipeConfig } from 'src/main';
 
-export async function pumpfunIndexer() {
-  const clickhouse = createClickhouseClient()
-
+export const pumpfunIndexer: IndexerFunction = async (portalUrl: string, clickhouse: NodeClickHouseClient, config: PipeConfig) => {
   const ds = new SolanaPumpfunTokensStream({
-    portal: process.env.PORTAL_URL || 'https://portal.sqd.dev/datasets/solana-beta',
+    portal: `${portalUrl}/datasets/solana-beta`,
     blockRange: {
-      from: process.env.PUMPFUN_FROM_BLOCK || 332557468,
-      to: process.env.PUMPFUN_TO_BLOCK,
+      from: config.fromBlock,
+      to: config.toBlock,
     },
     state: new ClickhouseState(clickhouse, {
       table: 'solana_sync_status',
@@ -38,4 +38,5 @@ export async function pumpfunIndexer() {
     await ds.ack();
   }
 }
+
 
