@@ -1,11 +1,8 @@
-import * as process from 'node:process';
-import * as tokenProgram from './abi/tokenProgram';
-// import * as clmm from './abi/clmm/index';
-import { SolanaSwapTransfer } from './solana_swaps';
-import { Block, Instruction, getInnerTransfersByLevel, getInstructionBalances, getTransactionHash } from './utils';
+import * as tokenProgram from '../../abi/tokenProgram';
+import { SolanaSwapTransfer } from '.';
+import { Block, Instruction, getInnerTransfersByLevel, getInstructionBalances } from '../../utils';
 
 export function handleRaydiumClmm(ins: Instruction, block: Block): SolanaSwapTransfer {
-  // const swap = whirlpool.instructions.swap.decode(ins);
   const [src, dest] = getInnerTransfersByLevel(ins, block.instructions, 1).map((t) =>
     tokenProgram.instructions.transfer.decode(t),
   );

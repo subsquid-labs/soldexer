@@ -435,6 +435,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sqd-pipes/core@npm:0.0.1-alpha.2":
+  version: 0.0.1-alpha.2
+  resolution: "@sqd-pipes/core@npm:0.0.1-alpha.2"
+  dependencies:
+    "@subsquid/http-client": "npm:^1.6.0"
+    "@subsquid/util-internal": "npm:^3.2.0"
+    lodash: "npm:^4.17.21"
+    pino: "npm:^9.7.0"
+  peerDependencies:
+    "@clickhouse/client": ^1.11.2
+  peerDependenciesMeta:
+    "@clickhouse/client":
+      optional: true
+  checksum: 10c0/911d7df6aedd515472a9c4be2e94a177f5b37d8acc289be0f8fea206db52ddb61ac428d181b4fb0179594d19ceeb5c07022d4cff137d881cc4cce3b1532539cf
+  languageName: node
+  linkType: hard
+
 "@subsquid/borsh@npm:^0.2.0":
   version: 0.2.0
   resolution: "@subsquid/borsh@npm:0.2.0"
@@ -1871,6 +1888,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "lodash@npm:4.17.21"
+  checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
+  languageName: node
+  linkType: hard
+
 "lower-case@npm:^2.0.2":
   version: 2.0.2
   resolution: "lower-case@npm:2.0.2"
@@ -2270,6 +2294,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pino@npm:^9.7.0":
+  version: 9.7.0
+  resolution: "pino@npm:9.7.0"
+  dependencies:
+    atomic-sleep: "npm:^1.0.0"
+    fast-redact: "npm:^3.1.1"
+    on-exit-leak-free: "npm:^2.1.0"
+    pino-abstract-transport: "npm:^2.0.0"
+    pino-std-serializers: "npm:^7.0.0"
+    process-warning: "npm:^5.0.0"
+    quick-format-unescaped: "npm:^4.0.3"
+    real-require: "npm:^0.2.0"
+    safe-stable-stringify: "npm:^2.3.1"
+    sonic-boom: "npm:^4.0.1"
+    thread-stream: "npm:^3.0.0"
+  bin:
+    pino: bin.js
+  checksum: 10c0/c7f8a83a9a9d728b4eff6d0f4b9367f031c91bcaa5806fbf0eedcc8e77faba593d59baf11a8fba0dd1c778bb17ca7ed01418ac1df4ec129faeedd4f3ecaff66f
+  languageName: node
+  linkType: hard
+
 "proc-log@npm:^5.0.0":
   version: 5.0.0
   resolution: "proc-log@npm:5.0.0"
@@ -2281,6 +2326,13 @@ __metadata:
   version: 4.0.1
   resolution: "process-warning@npm:4.0.1"
   checksum: 10c0/577a268b9fd5c3d9f6dbb4348220099391d830905642845d591e7ee8b1e45043d98b7b9826a3c1379bdd1686cdfe0f6cf349cb812affc5853b662e6a9896579e
+  languageName: node
+  linkType: hard
+
+"process-warning@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "process-warning@npm:5.0.0"
+  checksum: 10c0/941f48863d368ec161e0b5890ba0c6af94170078f3d6b5e915c19b36fb59edb0dc2f8e834d25e0d375a8bf368a49d490f080508842168832b93489d17843ec29
   languageName: node
   linkType: hard
 
@@ -2347,7 +2399,7 @@ __metadata:
   dependencies:
     "@biomejs/biome": "npm:^1.9.4"
     "@clickhouse/client": "npm:^1.10.1"
-    "@subsquid/portal-client": "npm:0.0.1-portal-api.da1f68"
+    "@sqd-pipes/core": "npm:0.0.1-alpha.2"
     "@subsquid/solana-stream": "npm:1.0.0-portal-api.da1f68"
     "@subsquid/solana-typegen": "npm:^0.4.0"
     "@types/lodash": "npm:^4"

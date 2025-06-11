@@ -1,6 +1,6 @@
-import { Logger } from '../../core/portal_abstract_stream';
-import * as tokenProgram from './abi/tokenProgram';
-import { SolanaSwapTransfer } from './solana_swaps';
+import { Logger } from '@sqd-pipes/core';
+import * as tokenProgram from '../../abi/tokenProgram';
+import { SolanaSwapTransfer } from '.';
 import {
   Block,
   Instruction,
@@ -8,7 +8,7 @@ import {
   getInstructionBalances,
   getInstructionD1,
   getTransactionHash,
-} from './utils';
+} from '../../utils';
 
 export function handleMeteoraDamm(logger: Logger, ins: Instruction, block: Block): SolanaSwapTransfer | null {
   // const swap = damm.instructions.swap.decode(ins);
