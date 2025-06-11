@@ -1,0 +1,20 @@
+{
+    "portalUrl": "https://portal.sqd.dev",
+    "clickhouse": {
+        "url": "http://localhost:8123",
+        "database": "default",
+        "username": "default",
+        "password": ""
+    },
+    "pipes": {
+        "swaps": {
+            "fromBlock": 332557468
+        },
+        "metaplex": {
+            "fromBlock": 332557468
+        },
+        "pumpfun": {
+            "fromBlock": 332557468
+        }
+    }
+}

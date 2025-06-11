@@ -1,10 +1,8 @@
-// import * as whirlpool from './abi/orca_whirlpool';
-import * as tokenProgram from './abi/tokenProgram';
-import { SolanaSwapTransfer } from './solana_swaps';
-import { Block, Instruction, getInnerTransfersByLevel, getInstructionBalances } from './utils';
+import * as tokenProgram from '../../abi/tokenProgram';
+import { SolanaSwapTransfer } from '.';
+import { Block, Instruction, getInnerTransfersByLevel, getInstructionBalances } from '../../utils';
 
 export function handleWhirlpool(ins: Instruction, block: Block): SolanaSwapTransfer {
-  // const swap = whirlpool.instructions.swap.decode(ins);
   const [src, dest] = getInnerTransfersByLevel(ins, block.instructions, 1).map((t) =>
     tokenProgram.instructions.transfer.decode(t),
   );

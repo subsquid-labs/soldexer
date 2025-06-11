@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import * as process from 'node:process';
 import { ClickHouseClient, createClient } from '@clickhouse/client';
+import { ClickhouseConfig } from 'src/main';
 
 export async function loadSqlFiles(directoryOrFile: string): Promise<string[]> {
   let sqlFiles: string[] = [];
@@ -36,11 +37,12 @@ export async function ensureTables(clickhouse: ClickHouseClient, dir: string) {
   }
 }
 
-export function createClickhouseClient() {
+export function createClickhouseClient(clickhouseConfig?: ClickhouseConfig) {
   return createClient({
-    url: process.env.CLICKHOUSE_URL || 'http://localhost:8123',
-    username: process.env.CLICKHOUSE_USER || 'default',
-    password: process.env.CLICKHOUSE_PASSWORD || '',
+    url: clickhouseConfig?.url || 'http://localhost:8123',
+    username: clickhouseConfig?.username || 'default',
+    password: clickhouseConfig?.password || '',
+    database: clickhouseConfig?.database || 'default',
     clickhouse_settings: {
       date_time_input_format: 'best_effort',
     },

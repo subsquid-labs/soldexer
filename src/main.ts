@@ -1,98 +1,73 @@
 import path from 'node:path';
-import { createClickhouseClient, ensureTables } from './clickhouse';
-import { ClickhouseState } from './core/states/clickhouse_state';
-import { SolanaSwapsStream } from './streams/solana_swaps/solana_swaps';
-import { createLogger, getSortFunction } from './utils';
+import fs from 'node:fs';
+import { metaplexIndexer } from "./indexers/metaplex";
+import { swapsIndexer } from "./indexers/swaps";
+import { pumpfunIndexer } from "./indexers/pumpfun";
+import { retry } from "./utils/retry";
+import { logger } from './utils';
+import { createClickhouseClient } from './db/clickhouse';
+import { NodeClickHouseClient } from '@clickhouse/client/dist/client';
 
-const TRACKED_TOKENS = [
-  'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v', // USDC
-  'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', // USDT
-  'So11111111111111111111111111111111111111112', // SOL
-];
+type Pipes = 'swaps' | 'metaplex' | 'pumpfun';
 
-/**
- * Generate sort tokens function sorting tokens naturally
- * to preserve the same pair order, i.e., ORCA/SOL and never SOL/ORCA.
- */
-const sortTokens = getSortFunction(TRACKED_TOKENS);
-
-async function main() {
-  const clickhouse = createClickhouseClient();
-  const logger = createLogger('solana_swaps');
-
-  /**
-   * Create a stream to read swaps from the Solana blockchain
-   * from 3 different DEXs:
-   * - Orca
-   * - Raydium
-   * - Meteora
-   */
-  const ds = new SolanaSwapsStream({
-    portal: 'https://portal.sqd.dev/datasets/solana-beta',
-    blockRange: {
-      from: process.env.FROM_BLOCK || 332557468,
-      to: process.env.TO_BLOCK,
-    },
-    args: {
-      tokens: TRACKED_TOKENS,
-    },
-    /**
-     * We can use the state to track the last block processed
-     * and resume from there.
-     */
-    state: new ClickhouseState(clickhouse, {
-      table: 'solana_sync_status',
-      id: 'dex_swaps',
-    }),
-
-    logger,
-  });
-
-  /**
-   * Ensure tables are created in ClickHouse
-   */
-  await ensureTables(clickhouse, path.join(__dirname, 'swaps.sql'));
-
-  for await (const swaps of await ds.stream()) {
-    await clickhouse.insert({
-      table: 'solana_swaps_raw',
-      values: swaps
-        /**
-         * Filter out swaps with zero amounts
-         */
-        .filter((s) => s.input.amount > 0 && s.output.amount > 0)
-        .map((s) => {
-          /**
-           * Check if we need to swap tokens to preserve the same pair order, i.e., ORCA/SOL and never SOL/ORCA.
-           */
-          const needTokenSwap = sortTokens(s.input.mint, s.output.mint);
-
-          const tokenA = !needTokenSwap ? s.input : s.output;
-          const tokenB = !needTokenSwap ? s.output : s.input;
-
-          const amountA = ((needTokenSwap ? 1 : -1) * Number(tokenA.amount)) / 10 ** tokenA.decimals;
-          const amountB = ((needTokenSwap ? -1 : 1) * Number(tokenB.amount)) / 10 ** tokenB.decimals;
-
-          return {
-            dex: s.type,
-            block_number: s.block.number,
-            transaction_hash: s.transaction.hash,
-            transaction_index: s.transaction.index,
-            instruction_address: s.instruction.address,
-            account: s.account,
-            token_a: tokenA.mint,
-            token_b: tokenB.mint,
-            amount_a: amountA.toString(),
-            amount_b: amountB.toString(),
-            timestamp: s.timestamp,
-            sign: 1,
-          };
-        }),
-      format: 'JSONEachRow',
-    });
-
-    await ds.ack();
-  }
+export interface PipeConfig {
+    fromBlock: number; 
+    toBlock?: number;
 }
 
-void main();
+export interface ClickhouseConfig {
+    database: string;
+    url: string;
+    username: string;
+    password: string;
+}
+
+export interface SoldexerConfig {
+    portalUrl: string;
+    pipes: Record<Pipes, PipeConfig>;
+    clickhouse?: ClickhouseConfig;
+}
+
+export type IndexerFunction = (portalUrl: string, clickhouse: NodeClickHouseClient ,config: PipeConfig) => Promise<void>;
+
+const indexersMap: Record<Pipes, IndexerFunction> = {
+    swaps: swapsIndexer,
+    metaplex: metaplexIndexer,
+    pumpfun: pumpfunIndexer,
+};
+
+async function main() {
+    const configPath = path.join(__dirname, '../soldexer.json');
+    const rawConfig = fs.readFileSync(configPath, 'utf-8')
+    const config: SoldexerConfig = JSON.parse(rawConfig);
+    const pipes: Pipes[] = Object.keys(config.pipes) as Pipes[];
+
+    if (pipes.length === 0) {
+        logger.error('No pipes configured in config.json');
+        process.exit(1);
+    }
+
+    logger.info(`Starting Soldexer with pipes: ${pipes.join(', ')}`);
+
+    const clickhouse = createClickhouseClient({
+        url: config.clickhouse?.url || 'http://localhost:8123',
+        database: config.clickhouse?.database || 'default',
+        username: config.clickhouse?.username || 'default',
+        password: config.clickhouse?.password || '',
+    });
+
+
+    await Promise.all(pipes.map(async (pipe) => {
+        const pipeConfig = config.pipes[pipe];
+        const portalUrl = config.portalUrl || 'https://portal.sqd.dev';
+
+        if (!indexersMap[pipe]) {
+            logger.error(`No indexer found for pipe: ${pipe}`);
+            return;
+        }
+
+        await retry(() => indexersMap[pipe](portalUrl, clickhouse, pipeConfig));
+    }))
+}
+
+void main()

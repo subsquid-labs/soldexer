@@ -1,15 +1,14 @@
-import { getInstructionData, getInstructionDescriptor } from '@subsquid/solana-stream';
-import { toHex } from '@subsquid/util-internal-hex';
-import { BlockRef, OptionalArgs, PortalAbstractStream } from '../../core/portal_abstract_stream';
-import * as meteora_damm from './abi/meteora_damm/index';
-import * as meteora_dlmm from './abi/meteora_dlmm/index';
-import * as whirlpool from './abi/orca_whirlpool/index';
-import * as raydium_amm from './abi/raydium_amm/index';
-import * as raydium_clmm from './abi/raydium_clmm/index';
+import { getInstructionDescriptor } from '@subsquid/solana-stream';
+import { BlockRef, OptionalArgs, PortalAbstractStream } from '@sqd-pipes/core';
+import * as meteora_damm from '../../abi/meteora_damm/index';
+import * as meteora_dlmm from '../../abi/meteora_dlmm/index';
+import * as whirlpool from '../../abi/orca_whirlpool/index';
+import * as raydium_amm from '../../abi/raydium_amm/index';
+import * as raydium_clmm from '../../abi/raydium_clmm/index';
 import { handleMeteoraDamm, handleMeteoraDlmm } from './handle_meteora';
 import { handleWhirlpool } from './handle_orca';
 import { handleRaydiumAmm, handleRaydiumClmm } from './handle_raydium';
-import { Instruction, getTransactionHash } from './utils';
+import { getInstructionD1, getTransactionHash } from '../../utils';
 
 export type SwapType = 'orca_whirlpool' | 'meteora_damm' | 'meteora_dlmm' | 'raydium_clmm' | 'raydium_amm';
 
@@ -39,10 +38,6 @@ export type SolanaSwapTransfer = {
   in: { amount: bigint; token: { postMint: string; postDecimals: number } };
   out: { amount: bigint; token: { postMint: string; postDecimals: number } };
 };
-
-export function getInstructionD1(instruction: Instruction) {
-  return toHex(getInstructionData(instruction)).slice(0, 4);
-}
 
 export class SolanaSwapsStream extends PortalAbstractStream<
   SolanaSwap,
