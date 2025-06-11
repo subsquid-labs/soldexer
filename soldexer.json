@@ -2,7 +2,7 @@
     "portalUrl": "https://portal.sqd.dev",
     "clickhouse": {
         "url": "http://localhost:8123",
-        "database": "soldexer",
+        "database": "default",
         "username": "default",
         "password": ""
     },
