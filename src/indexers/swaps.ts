@@ -27,7 +27,7 @@ export const swapsIndexer: IndexerFunction = async (portalUrl: string, clickhous
    * - Meteora
    */
   const ds = new SolanaSwapsStream({
-    portal: `${portalUrl}/datasets/solana-beta`,
+    portal: `${portalUrl}/datasets/solana-mainnet`,
     blockRange: {
       from: config.fromBlock,
       to: config.toBlock,

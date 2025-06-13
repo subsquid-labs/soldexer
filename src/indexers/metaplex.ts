@@ -8,7 +8,7 @@ import { NodeClickHouseClient } from '@clickhouse/client/dist/client';
 
 export const metaplexIndexer: IndexerFunction = async (portalUrl: string, clickhouse: NodeClickHouseClient, config: PipeConfig) => {
   const ds = new SolanaMetaplexStream({
-    portal: `${portalUrl}/datasets/solana-beta`,
+    portal: `${portalUrl}/datasets/solana-mainnet`,
     blockRange: {
       from: config.fromBlock,
       to: config.toBlock,

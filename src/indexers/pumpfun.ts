@@ -8,7 +8,7 @@ import { IndexerFunction, PipeConfig } from 'src/main';
 
 export const pumpfunIndexer: IndexerFunction = async (portalUrl: string, clickhouse: NodeClickHouseClient, config: PipeConfig) => {
   const ds = new SolanaPumpfunTokensStream({
-    portal: `${portalUrl}/datasets/solana-beta`,
+    portal: `${portalUrl}/datasets/solana-mainnet`,
     blockRange: {
       from: config.fromBlock,
       to: config.toBlock,
