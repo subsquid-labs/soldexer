@@ -45,3 +45,20 @@ export function getInnerTransfersByLevel(parent: Instruction, instructions: Inst
 export function getInstructionD1(instruction: Instruction) {
   return toHex(getInstructionData(instruction)).slice(0, 4)
 }
+
+/**
+ * Get all the logs of an instruction
+ * @param ins
+ * @param block
+ * @returns
+ */
+export function getInstructionLogs(ins: Instruction, block: Block) {
+  return (
+    block.logs?.filter(
+      (log) =>
+        log.transactionIndex === ins.transactionIndex &&
+        log.instructionAddress.length === ins.instructionAddress.length &&
+        log.instructionAddress.every((v, i) => v === ins.instructionAddress[i]),
+    ) || []
+  )
+}

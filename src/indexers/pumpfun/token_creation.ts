@@ -2,11 +2,11 @@ import path from 'node:path'
 import { NodeClickHouseClient } from '@clickhouse/client/dist/client'
 import { ClickhouseState } from '@sqd-pipes/core'
 import { IndexerFunction, PipeConfig } from 'src/main'
-import { ensureTables } from '../db/clickhouse'
-import { SolanaPumpfunTokensStream } from '../streams/pumpfun'
-import { logger } from '../utils/logger'
+import { ensureTables } from '../../db/clickhouse'
+import { SolanaPumpfunTokensStream } from '../../streams/pumpfun/token_creation'
+import { logger } from '../../utils/logger'
 
-export const pumpfunIndexer: IndexerFunction = async (
+export const pumpfunTokenCreationIndexer: IndexerFunction = async (
   portalUrl: string,
   clickhouse: NodeClickHouseClient,
   config: PipeConfig,
@@ -19,12 +19,12 @@ export const pumpfunIndexer: IndexerFunction = async (
     },
     state: new ClickhouseState(clickhouse, {
       table: 'solana_sync_status',
-      id: 'solana_pumpfun',
+      id: 'solana_pumpfun_token_creation',
     }),
     logger,
   })
 
-  await ensureTables(clickhouse, path.join(__dirname, '../db/sql/pumpfun.sql'))
+  await ensureTables(clickhouse, path.join(__dirname, '../../db/sql/pumpfun_token_creation.sql'))
 
   for await (const tokens of await ds.stream()) {
     await clickhouse.insert({
