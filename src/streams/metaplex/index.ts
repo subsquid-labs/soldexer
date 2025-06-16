@@ -1,17 +1,17 @@
-import { BlockRef, PortalAbstractStream, TransactionRef } from '@sqd-pipes/core';
-import { getInstructionD1, getTransactionHash } from '../../utils';
-import * as metaplex from '../../abi/metaplex';
+import { BlockRef, PortalAbstractStream, TransactionRef } from '@sqd-pipes/core'
+import * as metaplex from '../../abi/metaplex'
+import { getInstructionD1, getTransactionHash } from '../../utils'
 
 export type SolanaTokenMetadata = {
-  account: string;
-  mint: string;
-  name: string;
-  symbol: string;
-  uri: string;
-  isMutable: boolean;
-  transaction: TransactionRef;
-  block: BlockRef;
-};
+  account: string
+  mint: string
+  name: string
+  symbol: string
+  uri: string
+  isMutable: boolean
+  transaction: TransactionRef
+  block: BlockRef
+}
 
 export class SolanaMetaplexStream extends PortalAbstractStream<SolanaTokenMetadata> {
   async stream(): Promise<ReadableStream<SolanaTokenMetadata[]>> {
@@ -57,27 +57,27 @@ export class SolanaMetaplexStream extends PortalAbstractStream<SolanaTokenMetada
           transactionTokenBalances: true, // all token balance records of executed transaction
         },
       ],
-    });
+    })
 
     return source.pipeThrough(
       new TransformStream({
         transform: ({ blocks }, controller) => {
           // FIXME
           const res = blocks.flatMap((block: any) => {
-            if (!block.instructions) return [];
+            if (!block.instructions) return []
 
-            const metadata: SolanaTokenMetadata[] = [];
+            const metadata: SolanaTokenMetadata[] = []
 
             for (const ins of block.instructions) {
               if (ins.programId !== metaplex.programId) {
-                continue;
+                continue
               }
 
-              const desc = getInstructionD1(ins);
+              const desc = getInstructionD1(ins)
 
               switch (desc) {
                 case metaplex.instructions.createMetadataAccount.d1: {
-                  const md = metaplex.instructions.createMetadataAccount.decode(ins);
+                  const md = metaplex.instructions.createMetadataAccount.decode(ins)
                   return {
                     account: md.accounts.metadata,
                     mint: md.accounts.mint,
@@ -94,10 +94,10 @@ export class SolanaMetaplexStream extends PortalAbstractStream<SolanaTokenMetada
                       hash: block.header.hash,
                       timestamp: block.header.timestamp,
                     },
-                  };
+                  }
                 }
                 case metaplex.instructions.createMetadataAccountV2.d1: {
-                  const md = metaplex.instructions.createMetadataAccountV2.decode(ins);
+                  const md = metaplex.instructions.createMetadataAccountV2.decode(ins)
                   return {
                     account: md.accounts.metadata,
                     mint: md.accounts.mint,
@@ -114,10 +114,10 @@ export class SolanaMetaplexStream extends PortalAbstractStream<SolanaTokenMetada
                       hash: block.header.hash,
                       timestamp: block.header.timestamp,
                     },
-                  };
+                  }
                 }
                 case metaplex.instructions.createMetadataAccountV3.d1: {
-                  const md = metaplex.instructions.createMetadataAccountV3.decode(ins);
+                  const md = metaplex.instructions.createMetadataAccountV3.decode(ins)
                   return {
                     account: md.accounts.metadata,
                     mint: md.accounts.mint,
@@ -134,18 +134,17 @@ export class SolanaMetaplexStream extends PortalAbstractStream<SolanaTokenMetada
                       hash: block.header.hash,
                       timestamp: block.header.timestamp,
                     },
-                  };
+                  }
                 }
               }
             }
 
-            return metadata;
-          });
+            return metadata
+          })
 
-          controller.enqueue(res);
+          controller.enqueue(res)
         },
       }),
-    );
+    )
   }
 }
-

@@ -1,11 +1,11 @@
-import { struct, u8, address, option, unit, u64, string } from '@subsquid/borsh';
-import { instruction } from '../abi.support';
-import { AuthorityType } from './types';
+import { address, option, string, struct, u8, u64, unit } from '@subsquid/borsh'
+import { instruction } from '../abi.support'
+import { AuthorityType } from './types'
 
 export interface InitializeMint {
-  decimals: number;
-  mintAuthority: string;
-  freezeAuthority?: string | undefined;
+  decimals: number
+  mintAuthority: string
+  freezeAuthority?: string | undefined
 }
 
 export const initializeMint = instruction(
@@ -21,9 +21,9 @@ export const initializeMint = instruction(
     mintAuthority: address,
     freezeAuthority: option(address),
   }),
-);
+)
 
-export type InitializeAccount = undefined;
+export type InitializeAccount = undefined
 
 export const initializeAccount = instruction(
   {
@@ -36,10 +36,10 @@ export const initializeAccount = instruction(
     rentSysvar: 3,
   },
   unit,
-);
+)
 
 export interface InitializeMultisig {
-  noOfSignersRequired: number;
+  noOfSignersRequired: number
 }
 
 export const initializeMultisig = instruction(
@@ -54,10 +54,10 @@ export const initializeMultisig = instruction(
   struct({
     noOfSignersRequired: u8,
   }),
-);
+)
 
 export interface Transfer {
-  amount: bigint;
+  amount: bigint
 }
 
 export const transfer = instruction(
@@ -73,10 +73,10 @@ export const transfer = instruction(
   struct({
     amount: u64,
   }),
-);
+)
 
 export interface Approve {
-  amount: bigint;
+  amount: bigint
 }
 
 export const approve = instruction(
@@ -92,9 +92,9 @@ export const approve = instruction(
   struct({
     amount: u64,
   }),
-);
+)
 
-export type Revoke = undefined;
+export type Revoke = undefined
 
 export const revoke = instruction(
   {
@@ -106,11 +106,11 @@ export const revoke = instruction(
     signers: 2,
   },
   unit,
-);
+)
 
 export interface SetAuthority {
-  authorityType: AuthorityType;
-  newAuthority?: string | undefined;
+  authorityType: AuthorityType
+  newAuthority?: string | undefined
 }
 
 export const setAuthority = instruction(
@@ -126,10 +126,10 @@ export const setAuthority = instruction(
     authorityType: AuthorityType,
     newAuthority: option(address),
   }),
-);
+)
 
 export interface MintTo {
-  amount: bigint;
+  amount: bigint
 }
 
 export const mintTo = instruction(
@@ -145,10 +145,10 @@ export const mintTo = instruction(
   struct({
     amount: u64,
   }),
-);
+)
 
 export interface Burn {
-  amount: bigint;
+  amount: bigint
 }
 
 export const burn = instruction(
@@ -164,9 +164,9 @@ export const burn = instruction(
   struct({
     amount: u64,
   }),
-);
+)
 
-export type CloseAccount = undefined;
+export type CloseAccount = undefined
 
 export const closeAccount = instruction(
   {
@@ -179,9 +179,9 @@ export const closeAccount = instruction(
     signers: 3,
   },
   unit,
-);
+)
 
-export type FreezeAccount = undefined;
+export type FreezeAccount = undefined
 
 export const freezeAccount = instruction(
   {
@@ -194,9 +194,9 @@ export const freezeAccount = instruction(
     signers: 3,
   },
   unit,
-);
+)
 
-export type ThawAccount = undefined;
+export type ThawAccount = undefined
 
 export const thawAccount = instruction(
   {
@@ -209,11 +209,11 @@ export const thawAccount = instruction(
     signers: 3,
   },
   unit,
-);
+)
 
 export interface TransferChecked {
-  amount: bigint;
-  decimals: number;
+  amount: bigint
+  decimals: number
 }
 
 export const transferChecked = instruction(
@@ -231,11 +231,11 @@ export const transferChecked = instruction(
     amount: u64,
     decimals: u8,
   }),
-);
+)
 
 export interface ApproveChecked {
-  amount: bigint;
-  decimals: number;
+  amount: bigint
+  decimals: number
 }
 
 export const approveChecked = instruction(
@@ -253,11 +253,11 @@ export const approveChecked = instruction(
     amount: u64,
     decimals: u8,
   }),
-);
+)
 
 export interface MintToChecked {
-  amount: bigint;
-  decimals: number;
+  amount: bigint
+  decimals: number
 }
 
 export const mintToChecked = instruction(
@@ -274,11 +274,11 @@ export const mintToChecked = instruction(
     amount: u64,
     decimals: u8,
   }),
-);
+)
 
 export interface BurnChecked {
-  amount: bigint;
-  decimals: number;
+  amount: bigint
+  decimals: number
 }
 
 export const burnChecked = instruction(
@@ -295,10 +295,10 @@ export const burnChecked = instruction(
     amount: u64,
     decimals: u8,
   }),
-);
+)
 
 export interface InitializeAccount2 {
-  owner: string;
+  owner: string
 }
 
 export const initializeAccount2 = instruction(
@@ -313,9 +313,9 @@ export const initializeAccount2 = instruction(
   struct({
     owner: address,
   }),
-);
+)
 
-export type SyncNative = undefined;
+export type SyncNative = undefined
 
 export const syncNative = instruction(
   {
@@ -325,10 +325,10 @@ export const syncNative = instruction(
     nativeTokenAccount: 0,
   },
   unit,
-);
+)
 
 export interface InitializeAccount3 {
-  owner: string;
+  owner: string
 }
 
 export const initializeAccount3 = instruction(
@@ -342,10 +342,10 @@ export const initializeAccount3 = instruction(
   struct({
     owner: address,
   }),
-);
+)
 
 export interface InitializeMultisig2 {
-  m: number;
+  m: number
 }
 
 export const initializeMultisig2 = instruction(
@@ -359,12 +359,12 @@ export const initializeMultisig2 = instruction(
   struct({
     m: u8,
   }),
-);
+)
 
 export interface InitializeMint2 {
-  decimals: number;
-  mintAuthority: string;
-  freezeAuthority?: string | undefined;
+  decimals: number
+  mintAuthority: string
+  freezeAuthority?: string | undefined
 }
 
 export const initializeMint2 = instruction(
@@ -379,9 +379,9 @@ export const initializeMint2 = instruction(
     mintAuthority: address,
     freezeAuthority: option(address),
   }),
-);
+)
 
-export type GetAccountDataSize = undefined;
+export type GetAccountDataSize = undefined
 
 export const getAccountDataSize = instruction(
   {
@@ -391,9 +391,9 @@ export const getAccountDataSize = instruction(
     mint: 0,
   },
   unit,
-);
+)
 
-export type InitializeImmutableOwner = undefined;
+export type InitializeImmutableOwner = undefined
 
 export const initializeImmutableOwner = instruction(
   {
@@ -403,10 +403,10 @@ export const initializeImmutableOwner = instruction(
     initializeAccount: 0,
   },
   unit,
-);
+)
 
 export interface AmountToUiAmount {
-  amount: bigint;
+  amount: bigint
 }
 
 export const amountToUiAmount = instruction(
@@ -419,10 +419,10 @@ export const amountToUiAmount = instruction(
   struct({
     amount: u64,
   }),
-);
+)
 
 export interface UiAmountToAmount {
-  uiAmount: string;
+  uiAmount: string
 }
 
 export const uiAmountToAmount = instruction(
@@ -435,4 +435,4 @@ export const uiAmountToAmount = instruction(
   struct({
     uiAmount: string,
   }),
-);
+)

@@ -1,13 +1,13 @@
-import { PortalAbstractStream } from '@sqd-pipes/core';
-import { getInstructionDescriptor } from '@subsquid/solana-stream';
-import * as pumpfun from '../../abi/pumpfun';
+import { PortalAbstractStream } from '@sqd-pipes/core'
+import { getInstructionDescriptor } from '@subsquid/solana-stream'
+import * as pumpfun from '../../abi/pumpfun'
 
 export interface PumpfunTokenCreation {
-  name: string;
-  symbol: string;
-  uri: string;
-  deployTime: Date;
-  address: string;
+  name: string
+  symbol: string
+  uri: string
+  deployTime: Date
+  address: string
 }
 
 export class SolanaPumpfunTokensStream extends PortalAbstractStream<PumpfunTokenCreation> {
@@ -40,44 +40,43 @@ export class SolanaPumpfunTokensStream extends PortalAbstractStream<PumpfunToken
           transaction: true,
         },
       ],
-    });
+    })
 
     return source.pipeThrough(
       new TransformStream({
         transform: ({ blocks }, controller) => {
           const res = blocks.flatMap((block: any) => {
-            if (!block.instructions) return [];
+            if (!block.instructions) return []
 
-            const tokens: PumpfunTokenCreation[] = [];
+            const tokens: PumpfunTokenCreation[] = []
 
             for (const ins of block.instructions) {
               if (
                 ins.programId !== pumpfun.programId ||
                 getInstructionDescriptor(ins) !== pumpfun.instructions.create.d8
               ) {
-                continue;
+                continue
               }
 
-              const token = pumpfun.instructions.create.decode(ins);
+              const token = pumpfun.instructions.create.decode(ins)
 
               if (!token.data.name || !token.data.symbol) {
-                continue;
+                continue
               }
 
               tokens.push({
                 ...token.data,
                 address: token.accounts.mint,
                 deployTime: new Date(block.header.timestamp * 1000),
-              });
+              })
             }
 
-            return tokens;
-          });
+            return tokens
+          })
 
-          controller.enqueue(res);
+          controller.enqueue(res)
         },
       }),
-    );
+    )
   }
 }
-

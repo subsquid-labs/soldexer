@@ -1,35 +1,35 @@
-import { struct, unit } from '@subsquid/borsh';
-import { instruction } from '../abi.support';
+import { struct, unit } from '@subsquid/borsh'
+import { instruction } from '../abi.support'
 import {
-  CreateMetadataAccountArgs,
-  UpdateMetadataAccountArgs,
-  CreateMasterEditionArgs,
-  SetReservationListArgs,
-  MintPrintingTokensViaTokenArgs,
-  MintNewEditionFromMasterEditionViaTokenArgs,
-  UpdateMetadataAccountArgsV2,
-  CreateMetadataAccountArgsV2,
-  UtilizeArgs,
   ApproveUseAuthorityArgs,
-  CreateMetadataAccountArgsV3,
-  SetCollectionSizeArgs,
-  TransferOutOfEscrowArgs,
   BurnArgs,
   CreateArgs,
-  MintArgs,
+  CreateMasterEditionArgs,
+  CreateMetadataAccountArgs,
+  CreateMetadataAccountArgsV2,
+  CreateMetadataAccountArgsV3,
   DelegateArgs,
-  RevokeArgs,
   LockArgs,
-  UnlockArgs,
-  TransferArgs,
-  UpdateArgs,
-  UseArgs,
-  VerificationArgs,
+  MintArgs,
+  MintNewEditionFromMasterEditionViaTokenArgs,
+  MintPrintingTokensViaTokenArgs,
   PrintArgs,
-} from './types';
+  RevokeArgs,
+  SetCollectionSizeArgs,
+  SetReservationListArgs,
+  TransferArgs,
+  TransferOutOfEscrowArgs,
+  UnlockArgs,
+  UpdateArgs,
+  UpdateMetadataAccountArgs,
+  UpdateMetadataAccountArgsV2,
+  UseArgs,
+  UtilizeArgs,
+  VerificationArgs,
+} from './types'
 
 export interface CreateMetadataAccount {
-  createMetadataAccountArgs: CreateMetadataAccountArgs;
+  createMetadataAccountArgs: CreateMetadataAccountArgs
 }
 
 export const createMetadataAccount = instruction(
@@ -48,10 +48,10 @@ export const createMetadataAccount = instruction(
   struct({
     createMetadataAccountArgs: CreateMetadataAccountArgs,
   }),
-);
+)
 
 export interface UpdateMetadataAccount {
-  updateMetadataAccountArgs: UpdateMetadataAccountArgs;
+  updateMetadataAccountArgs: UpdateMetadataAccountArgs
 }
 
 export const updateMetadataAccount = instruction(
@@ -65,10 +65,10 @@ export const updateMetadataAccount = instruction(
   struct({
     updateMetadataAccountArgs: UpdateMetadataAccountArgs,
   }),
-);
+)
 
 export interface DeprecatedCreateMasterEdition {
-  createMasterEditionArgs: CreateMasterEditionArgs;
+  createMasterEditionArgs: CreateMasterEditionArgs
 }
 
 export const deprecatedCreateMasterEdition = instruction(
@@ -93,9 +93,9 @@ export const deprecatedCreateMasterEdition = instruction(
   struct({
     createMasterEditionArgs: CreateMasterEditionArgs,
   }),
-);
+)
 
-export type DeprecatedMintNewEditionFromMasterEditionViaPrintingToken = undefined;
+export type DeprecatedMintNewEditionFromMasterEditionViaPrintingToken = undefined
 
 export const deprecatedMintNewEditionFromMasterEditionViaPrintingToken = instruction(
   {
@@ -120,9 +120,9 @@ export const deprecatedMintNewEditionFromMasterEditionViaPrintingToken = instruc
     reservationList: 15,
   },
   unit,
-);
+)
 
-export type UpdatePrimarySaleHappenedViaToken = undefined;
+export type UpdatePrimarySaleHappenedViaToken = undefined
 
 export const updatePrimarySaleHappenedViaToken = instruction(
   {
@@ -134,10 +134,10 @@ export const updatePrimarySaleHappenedViaToken = instruction(
     token: 2,
   },
   unit,
-);
+)
 
 export interface DeprecatedSetReservationList {
-  setReservationListArgs: SetReservationListArgs;
+  setReservationListArgs: SetReservationListArgs
 }
 
 export const deprecatedSetReservationList = instruction(
@@ -152,9 +152,9 @@ export const deprecatedSetReservationList = instruction(
   struct({
     setReservationListArgs: SetReservationListArgs,
   }),
-);
+)
 
-export type DeprecatedCreateReservationList = undefined;
+export type DeprecatedCreateReservationList = undefined
 
 export const deprecatedCreateReservationList = instruction(
   {
@@ -171,9 +171,9 @@ export const deprecatedCreateReservationList = instruction(
     rent: 7,
   },
   unit,
-);
+)
 
-export type SignMetadata = undefined;
+export type SignMetadata = undefined
 
 export const signMetadata = instruction(
   {
@@ -184,10 +184,10 @@ export const signMetadata = instruction(
     creator: 1,
   },
   unit,
-);
+)
 
 export interface DeprecatedMintPrintingTokensViaToken {
-  mintPrintingTokensViaTokenArgs: MintPrintingTokensViaTokenArgs;
+  mintPrintingTokensViaTokenArgs: MintPrintingTokensViaTokenArgs
 }
 
 export const deprecatedMintPrintingTokensViaToken = instruction(
@@ -208,10 +208,10 @@ export const deprecatedMintPrintingTokensViaToken = instruction(
   struct({
     mintPrintingTokensViaTokenArgs: MintPrintingTokensViaTokenArgs,
   }),
-);
+)
 
 export interface DeprecatedMintPrintingTokens {
-  mintPrintingTokensViaTokenArgs: MintPrintingTokensViaTokenArgs;
+  mintPrintingTokensViaTokenArgs: MintPrintingTokensViaTokenArgs
 }
 
 export const deprecatedMintPrintingTokens = instruction(
@@ -230,10 +230,10 @@ export const deprecatedMintPrintingTokens = instruction(
   struct({
     mintPrintingTokensViaTokenArgs: MintPrintingTokensViaTokenArgs,
   }),
-);
+)
 
 export interface CreateMasterEdition {
-  createMasterEditionArgs: CreateMasterEditionArgs;
+  createMasterEditionArgs: CreateMasterEditionArgs
 }
 
 export const createMasterEdition = instruction(
@@ -254,10 +254,10 @@ export const createMasterEdition = instruction(
   struct({
     createMasterEditionArgs: CreateMasterEditionArgs,
   }),
-);
+)
 
 export interface MintNewEditionFromMasterEditionViaToken {
-  mintNewEditionFromMasterEditionViaTokenArgs: MintNewEditionFromMasterEditionViaTokenArgs;
+  mintNewEditionFromMasterEditionViaTokenArgs: MintNewEditionFromMasterEditionViaTokenArgs
 }
 
 export const mintNewEditionFromMasterEditionViaToken = instruction(
@@ -283,9 +283,9 @@ export const mintNewEditionFromMasterEditionViaToken = instruction(
   struct({
     mintNewEditionFromMasterEditionViaTokenArgs: MintNewEditionFromMasterEditionViaTokenArgs,
   }),
-);
+)
 
-export type ConvertMasterEditionV1ToV2 = undefined;
+export type ConvertMasterEditionV1ToV2 = undefined
 
 export const convertMasterEditionV1ToV2 = instruction(
   {
@@ -297,10 +297,10 @@ export const convertMasterEditionV1ToV2 = instruction(
     printingMint: 2,
   },
   unit,
-);
+)
 
 export interface MintNewEditionFromMasterEditionViaVaultProxy {
-  mintNewEditionFromMasterEditionViaTokenArgs: MintNewEditionFromMasterEditionViaTokenArgs;
+  mintNewEditionFromMasterEditionViaTokenArgs: MintNewEditionFromMasterEditionViaTokenArgs
 }
 
 export const mintNewEditionFromMasterEditionViaVaultProxy = instruction(
@@ -329,9 +329,9 @@ export const mintNewEditionFromMasterEditionViaVaultProxy = instruction(
   struct({
     mintNewEditionFromMasterEditionViaTokenArgs: MintNewEditionFromMasterEditionViaTokenArgs,
   }),
-);
+)
 
-export type PuffMetadata = undefined;
+export type PuffMetadata = undefined
 
 export const puffMetadata = instruction(
   {
@@ -341,10 +341,10 @@ export const puffMetadata = instruction(
     metadata: 0,
   },
   unit,
-);
+)
 
 export interface UpdateMetadataAccountV2 {
-  updateMetadataAccountArgsV2: UpdateMetadataAccountArgsV2;
+  updateMetadataAccountArgsV2: UpdateMetadataAccountArgsV2
 }
 
 export const updateMetadataAccountV2 = instruction(
@@ -358,10 +358,10 @@ export const updateMetadataAccountV2 = instruction(
   struct({
     updateMetadataAccountArgsV2: UpdateMetadataAccountArgsV2,
   }),
-);
+)
 
 export interface CreateMetadataAccountV2 {
-  createMetadataAccountArgsV2: CreateMetadataAccountArgsV2;
+  createMetadataAccountArgsV2: CreateMetadataAccountArgsV2
 }
 
 export const createMetadataAccountV2 = instruction(
@@ -380,10 +380,10 @@ export const createMetadataAccountV2 = instruction(
   struct({
     createMetadataAccountArgsV2: CreateMetadataAccountArgsV2,
   }),
-);
+)
 
 export interface CreateMasterEditionV3 {
-  createMasterEditionArgs: CreateMasterEditionArgs;
+  createMasterEditionArgs: CreateMasterEditionArgs
 }
 
 export const createMasterEditionV3 = instruction(
@@ -404,9 +404,9 @@ export const createMasterEditionV3 = instruction(
   struct({
     createMasterEditionArgs: CreateMasterEditionArgs,
   }),
-);
+)
 
-export type VerifyCollection = undefined;
+export type VerifyCollection = undefined
 
 export const verifyCollection = instruction(
   {
@@ -422,10 +422,10 @@ export const verifyCollection = instruction(
     collectionAuthorityRecord: 6,
   },
   unit,
-);
+)
 
 export interface Utilize {
-  utilizeArgs: UtilizeArgs;
+  utilizeArgs: UtilizeArgs
 }
 
 export const utilize = instruction(
@@ -448,10 +448,10 @@ export const utilize = instruction(
   struct({
     utilizeArgs: UtilizeArgs,
   }),
-);
+)
 
 export interface ApproveUseAuthority {
-  approveUseAuthorityArgs: ApproveUseAuthorityArgs;
+  approveUseAuthorityArgs: ApproveUseAuthorityArgs
 }
 
 export const approveUseAuthority = instruction(
@@ -474,9 +474,9 @@ export const approveUseAuthority = instruction(
   struct({
     approveUseAuthorityArgs: ApproveUseAuthorityArgs,
   }),
-);
+)
 
-export type RevokeUseAuthority = undefined;
+export type RevokeUseAuthority = undefined
 
 export const revokeUseAuthority = instruction(
   {
@@ -494,9 +494,9 @@ export const revokeUseAuthority = instruction(
     rent: 8,
   },
   unit,
-);
+)
 
-export type UnverifyCollection = undefined;
+export type UnverifyCollection = undefined
 
 export const unverifyCollection = instruction(
   {
@@ -511,9 +511,9 @@ export const unverifyCollection = instruction(
     collectionAuthorityRecord: 5,
   },
   unit,
-);
+)
 
-export type ApproveCollectionAuthority = undefined;
+export type ApproveCollectionAuthority = undefined
 
 export const approveCollectionAuthority = instruction(
   {
@@ -530,9 +530,9 @@ export const approveCollectionAuthority = instruction(
     rent: 7,
   },
   unit,
-);
+)
 
-export type RevokeCollectionAuthority = undefined;
+export type RevokeCollectionAuthority = undefined
 
 export const revokeCollectionAuthority = instruction(
   {
@@ -546,9 +546,9 @@ export const revokeCollectionAuthority = instruction(
     mint: 4,
   },
   unit,
-);
+)
 
-export type SetAndVerifyCollection = undefined;
+export type SetAndVerifyCollection = undefined
 
 export const setAndVerifyCollection = instruction(
   {
@@ -565,9 +565,9 @@ export const setAndVerifyCollection = instruction(
     collectionAuthorityRecord: 7,
   },
   unit,
-);
+)
 
-export type FreezeDelegatedAccount = undefined;
+export type FreezeDelegatedAccount = undefined
 
 export const freezeDelegatedAccount = instruction(
   {
@@ -581,9 +581,9 @@ export const freezeDelegatedAccount = instruction(
     tokenProgram: 4,
   },
   unit,
-);
+)
 
-export type ThawDelegatedAccount = undefined;
+export type ThawDelegatedAccount = undefined
 
 export const thawDelegatedAccount = instruction(
   {
@@ -597,9 +597,9 @@ export const thawDelegatedAccount = instruction(
     tokenProgram: 4,
   },
   unit,
-);
+)
 
-export type RemoveCreatorVerification = undefined;
+export type RemoveCreatorVerification = undefined
 
 export const removeCreatorVerification = instruction(
   {
@@ -610,9 +610,9 @@ export const removeCreatorVerification = instruction(
     creator: 1,
   },
   unit,
-);
+)
 
-export type BurnNft = undefined;
+export type BurnNft = undefined
 
 export const burnNft = instruction(
   {
@@ -628,9 +628,9 @@ export const burnNft = instruction(
     collectionMetadata: 6,
   },
   unit,
-);
+)
 
-export type VerifySizedCollectionItem = undefined;
+export type VerifySizedCollectionItem = undefined
 
 export const verifySizedCollectionItem = instruction(
   {
@@ -646,9 +646,9 @@ export const verifySizedCollectionItem = instruction(
     collectionAuthorityRecord: 6,
   },
   unit,
-);
+)
 
-export type UnverifySizedCollectionItem = undefined;
+export type UnverifySizedCollectionItem = undefined
 
 export const unverifySizedCollectionItem = instruction(
   {
@@ -664,9 +664,9 @@ export const unverifySizedCollectionItem = instruction(
     collectionAuthorityRecord: 6,
   },
   unit,
-);
+)
 
-export type SetAndVerifySizedCollectionItem = undefined;
+export type SetAndVerifySizedCollectionItem = undefined
 
 export const setAndVerifySizedCollectionItem = instruction(
   {
@@ -683,10 +683,10 @@ export const setAndVerifySizedCollectionItem = instruction(
     collectionAuthorityRecord: 7,
   },
   unit,
-);
+)
 
 export interface CreateMetadataAccountV3 {
-  createMetadataAccountArgsV3: CreateMetadataAccountArgsV3;
+  createMetadataAccountArgsV3: CreateMetadataAccountArgsV3
 }
 
 export const createMetadataAccountV3 = instruction(
@@ -705,10 +705,10 @@ export const createMetadataAccountV3 = instruction(
   struct({
     createMetadataAccountArgsV3: CreateMetadataAccountArgsV3,
   }),
-);
+)
 
 export interface SetCollectionSize {
-  setCollectionSizeArgs: SetCollectionSizeArgs;
+  setCollectionSizeArgs: SetCollectionSizeArgs
 }
 
 export const setCollectionSize = instruction(
@@ -724,9 +724,9 @@ export const setCollectionSize = instruction(
   struct({
     setCollectionSizeArgs: SetCollectionSizeArgs,
   }),
-);
+)
 
-export type SetTokenStandard = undefined;
+export type SetTokenStandard = undefined
 
 export const setTokenStandard = instruction(
   {
@@ -739,10 +739,10 @@ export const setTokenStandard = instruction(
     edition: 3,
   },
   unit,
-);
+)
 
 export interface BubblegumSetCollectionSize {
-  setCollectionSizeArgs: SetCollectionSizeArgs;
+  setCollectionSizeArgs: SetCollectionSizeArgs
 }
 
 export const bubblegumSetCollectionSize = instruction(
@@ -759,9 +759,9 @@ export const bubblegumSetCollectionSize = instruction(
   struct({
     setCollectionSizeArgs: SetCollectionSizeArgs,
   }),
-);
+)
 
-export type BurnEditionNft = undefined;
+export type BurnEditionNft = undefined
 
 export const burnEditionNft = instruction(
   {
@@ -780,9 +780,9 @@ export const burnEditionNft = instruction(
     splTokenProgram: 9,
   },
   unit,
-);
+)
 
-export type CreateEscrowAccount = undefined;
+export type CreateEscrowAccount = undefined
 
 export const createEscrowAccount = instruction(
   {
@@ -800,9 +800,9 @@ export const createEscrowAccount = instruction(
     authority: 8,
   },
   unit,
-);
+)
 
-export type CloseEscrowAccount = undefined;
+export type CloseEscrowAccount = undefined
 
 export const closeEscrowAccount = instruction(
   {
@@ -819,10 +819,10 @@ export const closeEscrowAccount = instruction(
     sysvarInstructions: 7,
   },
   unit,
-);
+)
 
 export interface TransferOutOfEscrow {
-  transferOutOfEscrowArgs: TransferOutOfEscrowArgs;
+  transferOutOfEscrowArgs: TransferOutOfEscrowArgs
 }
 
 export const transferOutOfEscrow = instruction(
@@ -847,10 +847,10 @@ export const transferOutOfEscrow = instruction(
   struct({
     transferOutOfEscrowArgs: TransferOutOfEscrowArgs,
   }),
-);
+)
 
 export interface Burn {
-  burnArgs: BurnArgs;
+  burnArgs: BurnArgs
 }
 
 export const burn = instruction(
@@ -876,10 +876,10 @@ export const burn = instruction(
   struct({
     burnArgs: BurnArgs,
   }),
-);
+)
 
 export interface Create {
-  createArgs: CreateArgs;
+  createArgs: CreateArgs
 }
 
 export const create = instruction(
@@ -900,10 +900,10 @@ export const create = instruction(
   struct({
     createArgs: CreateArgs,
   }),
-);
+)
 
 export interface Mint {
-  mintArgs: MintArgs;
+  mintArgs: MintArgs
 }
 
 export const mint = instruction(
@@ -930,10 +930,10 @@ export const mint = instruction(
   struct({
     mintArgs: MintArgs,
   }),
-);
+)
 
 export interface Delegate {
-  delegateArgs: DelegateArgs;
+  delegateArgs: DelegateArgs
 }
 
 export const delegate = instruction(
@@ -959,10 +959,10 @@ export const delegate = instruction(
   struct({
     delegateArgs: DelegateArgs,
   }),
-);
+)
 
 export interface Revoke {
-  revokeArgs: RevokeArgs;
+  revokeArgs: RevokeArgs
 }
 
 export const revoke = instruction(
@@ -988,10 +988,10 @@ export const revoke = instruction(
   struct({
     revokeArgs: RevokeArgs,
   }),
-);
+)
 
 export interface Lock {
-  lockArgs: LockArgs;
+  lockArgs: LockArgs
 }
 
 export const lock = instruction(
@@ -1016,10 +1016,10 @@ export const lock = instruction(
   struct({
     lockArgs: LockArgs,
   }),
-);
+)
 
 export interface Unlock {
-  unlockArgs: UnlockArgs;
+  unlockArgs: UnlockArgs
 }
 
 export const unlock = instruction(
@@ -1044,9 +1044,9 @@ export const unlock = instruction(
   struct({
     unlockArgs: UnlockArgs,
   }),
-);
+)
 
-export type Migrate = undefined;
+export type Migrate = undefined
 
 export const migrate = instruction(
   {
@@ -1070,10 +1070,10 @@ export const migrate = instruction(
     authorizationRules: 14,
   },
   unit,
-);
+)
 
 export interface Transfer {
-  transferArgs: TransferArgs;
+  transferArgs: TransferArgs
 }
 
 export const transfer = instruction(
@@ -1102,10 +1102,10 @@ export const transfer = instruction(
   struct({
     transferArgs: TransferArgs,
   }),
-);
+)
 
 export interface Update {
-  updateArgs: UpdateArgs;
+  updateArgs: UpdateArgs
 }
 
 export const update = instruction(
@@ -1128,10 +1128,10 @@ export const update = instruction(
   struct({
     updateArgs: UpdateArgs,
   }),
-);
+)
 
 export interface Use {
-  useArgs: UseArgs;
+  useArgs: UseArgs
 }
 
 export const use = instruction(
@@ -1155,10 +1155,10 @@ export const use = instruction(
   struct({
     useArgs: UseArgs,
   }),
-);
+)
 
 export interface Verify {
-  verificationArgs: VerificationArgs;
+  verificationArgs: VerificationArgs
 }
 
 export const verify = instruction(
@@ -1178,10 +1178,10 @@ export const verify = instruction(
   struct({
     verificationArgs: VerificationArgs,
   }),
-);
+)
 
 export interface Unverify {
-  verificationArgs: VerificationArgs;
+  verificationArgs: VerificationArgs
 }
 
 export const unverify = instruction(
@@ -1200,9 +1200,9 @@ export const unverify = instruction(
   struct({
     verificationArgs: VerificationArgs,
   }),
-);
+)
 
-export type Collect = undefined;
+export type Collect = undefined
 
 export const collect = instruction(
   {
@@ -1213,10 +1213,10 @@ export const collect = instruction(
     pdaAccount: 1,
   },
   unit,
-);
+)
 
 export interface Print {
-  printArgs: PrintArgs;
+  printArgs: PrintArgs
 }
 
 export const print = instruction(
@@ -1246,4 +1246,4 @@ export const print = instruction(
   struct({
     printArgs: PrintArgs,
   }),
-);
+)

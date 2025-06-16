@@ -1,6 +1,6 @@
-import { Logger } from '@sqd-pipes/core';
-import * as tokenProgram from '../../abi/tokenProgram';
-import { SolanaSwapTransfer } from '.';
+import { Logger } from '@sqd-pipes/core'
+import { SolanaSwapTransfer } from '.'
+import * as tokenProgram from '../../abi/tokenProgram'
 import {
   Block,
   Instruction,
@@ -8,7 +8,7 @@ import {
   getInstructionBalances,
   getInstructionD1,
   getTransactionHash,
-} from '../../utils';
+} from '../../utils'
 
 export function handleMeteoraDamm(logger: Logger, ins: Instruction, block: Block): SolanaSwapTransfer | null {
   // const swap = damm.instructions.swap.decode(ins);
@@ -23,22 +23,22 @@ export function handleMeteoraDamm(logger: Logger, ins: Instruction, block: Block
    */
   const transfers = block.instructions
     .filter((inner) => {
-      if (inner.transactionIndex !== ins.transactionIndex) return false;
-      if (inner.instructionAddress.length <= ins.instructionAddress.length) return false;
-      if (inner.programId !== tokenProgram.programId) return false;
+      if (inner.transactionIndex !== ins.transactionIndex) return false
+      if (inner.instructionAddress.length <= ins.instructionAddress.length) return false
+      if (inner.programId !== tokenProgram.programId) return false
 
       if (getInstructionD1(inner) !== tokenProgram.instructions.transfer.d1) {
-        return false;
+        return false
       }
 
-      return ins.instructionAddress.every((v, i) => v === inner.instructionAddress[i]);
+      return ins.instructionAddress.every((v, i) => v === inner.instructionAddress[i])
     })
     .map((t) => {
-      return tokenProgram.instructions.transfer.decode(t);
-    });
+      return tokenProgram.instructions.transfer.decode(t)
+    })
 
   // DAMM could have internal transfers, the last two transfers are final src and dest
-  const [src, dest] = transfers.slice(-2);
+  const [src, dest] = transfers.slice(-2)
   if (!src || !dest) {
     logger.warn({
       message: 'Meteora DAMM: src or dest not found',
@@ -46,12 +46,12 @@ export function handleMeteoraDamm(logger: Logger, ins: Instruction, block: Block
       block_number: block.header.number,
       src,
       dest,
-    });
+    })
 
-    return null;
+    return null
   }
 
-  const tokenBalances = getInstructionBalances(ins, block);
+  const tokenBalances = getInstructionBalances(ins, block)
   return {
     type: 'meteora_damm',
     account: src.accounts.authority,
@@ -63,21 +63,21 @@ export function handleMeteoraDamm(logger: Logger, ins: Instruction, block: Block
       amount: dest.data.amount,
       token: tokenBalances.find((b) => b.account === dest.accounts.source),
     },
-  };
+  }
 }
 
 export function handleMeteoraDlmm(ins: Instruction, block: Block): SolanaSwapTransfer {
   // const swap = dlmm.instructions.swap.decode(ins);
 
   const transfers = getInnerTransfersByLevel(ins, block.instructions, 1).map((t) => {
-    return tokenProgram.instructions.transferChecked.decode(t);
-  });
+    return tokenProgram.instructions.transferChecked.decode(t)
+  })
 
   // DAMM could have internal transfers, the last two transfers are final src and dest
   // TODO if there are more than 2 transfers, is the first one fee?
   // 2fsnqWFXfmPkNPMTe2BVrDgSEhgezDTtvXxedrDHJrrLXNWR7K2DpPZ13N2DppGrYmTpofAfToXzaqyBWiumJGZ4
-  const [src, dest] = transfers.slice(-2);
-  const tokenBalances = getInstructionBalances(ins, block);
+  const [src, dest] = transfers.slice(-2)
+  const tokenBalances = getInstructionBalances(ins, block)
 
   return {
     type: 'meteora_dlmm',
@@ -90,5 +90,5 @@ export function handleMeteoraDlmm(ins: Instruction, block: Block): SolanaSwapTra
       amount: dest.data.amount,
       token: tokenBalances.find((b) => b.account === dest.accounts.source),
     },
-  };
+  }
 }

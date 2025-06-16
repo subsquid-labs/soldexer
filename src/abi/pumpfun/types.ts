@@ -1,14 +1,14 @@
-import { Codec, struct, bool, address, u64, string, i64 } from '@subsquid/borsh';
+import { Codec, address, bool, i64, string, struct, u64 } from '@subsquid/borsh'
 
 export interface Global {
-  initialized: boolean;
-  authority: string;
-  feeRecipient: string;
-  initialVirtualTokenReserves: bigint;
-  initialVirtualSolReserves: bigint;
-  initialRealTokenReserves: bigint;
-  tokenTotalSupply: bigint;
-  feeBasisPoints: bigint;
+  initialized: boolean
+  authority: string
+  feeRecipient: string
+  initialVirtualTokenReserves: bigint
+  initialVirtualSolReserves: bigint
+  initialRealTokenReserves: bigint
+  tokenTotalSupply: bigint
+  feeBasisPoints: bigint
 }
 
 export const Global: Codec<Global> = struct({
@@ -20,15 +20,15 @@ export const Global: Codec<Global> = struct({
   initialRealTokenReserves: u64,
   tokenTotalSupply: u64,
   feeBasisPoints: u64,
-});
+})
 
 export interface BondingCurve {
-  virtualTokenReserves: bigint;
-  virtualSolReserves: bigint;
-  realTokenReserves: bigint;
-  realSolReserves: bigint;
-  tokenTotalSupply: bigint;
-  complete: boolean;
+  virtualTokenReserves: bigint
+  virtualSolReserves: bigint
+  realTokenReserves: bigint
+  realSolReserves: bigint
+  tokenTotalSupply: bigint
+  complete: boolean
 }
 
 export const BondingCurve: Codec<BondingCurve> = struct({
@@ -38,15 +38,15 @@ export const BondingCurve: Codec<BondingCurve> = struct({
   realSolReserves: u64,
   tokenTotalSupply: u64,
   complete: bool,
-});
+})
 
 export interface CreateEvent {
-  name: string;
-  symbol: string;
-  uri: string;
-  mint: string;
-  bondingCurve: string;
-  user: string;
+  name: string
+  symbol: string
+  uri: string
+  mint: string
+  bondingCurve: string
+  user: string
 }
 
 export const CreateEvent: Codec<CreateEvent> = struct({
@@ -56,17 +56,17 @@ export const CreateEvent: Codec<CreateEvent> = struct({
   mint: address,
   bondingCurve: address,
   user: address,
-});
+})
 
 export interface TradeEvent {
-  mint: string;
-  solAmount: bigint;
-  tokenAmount: bigint;
-  isBuy: boolean;
-  user: string;
-  timestamp: bigint;
-  virtualSolReserves: bigint;
-  virtualTokenReserves: bigint;
+  mint: string
+  solAmount: bigint
+  tokenAmount: bigint
+  isBuy: boolean
+  user: string
+  timestamp: bigint
+  virtualSolReserves: bigint
+  virtualTokenReserves: bigint
 }
 
 export const TradeEvent: Codec<TradeEvent> = struct({
@@ -78,13 +78,13 @@ export const TradeEvent: Codec<TradeEvent> = struct({
   timestamp: i64,
   virtualSolReserves: u64,
   virtualTokenReserves: u64,
-});
+})
 
 export interface CompleteEvent {
-  user: string;
-  mint: string;
-  bondingCurve: string;
-  timestamp: bigint;
+  user: string
+  mint: string
+  bondingCurve: string
+  timestamp: bigint
 }
 
 export const CompleteEvent: Codec<CompleteEvent> = struct({
@@ -92,15 +92,15 @@ export const CompleteEvent: Codec<CompleteEvent> = struct({
   mint: address,
   bondingCurve: address,
   timestamp: i64,
-});
+})
 
 export interface SetParamsEvent {
-  feeRecipient: string;
-  initialVirtualTokenReserves: bigint;
-  initialVirtualSolReserves: bigint;
-  initialRealTokenReserves: bigint;
-  tokenTotalSupply: bigint;
-  feeBasisPoints: bigint;
+  feeRecipient: string
+  initialVirtualTokenReserves: bigint
+  initialVirtualSolReserves: bigint
+  initialRealTokenReserves: bigint
+  tokenTotalSupply: bigint
+  feeBasisPoints: bigint
 }
 
 export const SetParamsEvent: Codec<SetParamsEvent> = struct({
@@ -110,4 +110,4 @@ export const SetParamsEvent: Codec<SetParamsEvent> = struct({
   initialRealTokenReserves: u64,
   tokenTotalSupply: u64,
   feeBasisPoints: u64,
-});
+})
