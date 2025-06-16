@@ -1,4 +1,4 @@
-import pino from 'pino';
+import pino from 'pino'
 
 /**
  * Shared logger instance for consistent logging across the application
@@ -15,12 +15,11 @@ export const logger = pino({
     },
   },
   base: {},
-});
+})
 
 /**gp
  * Creates a child logger with additional context
  */
 export function createChildLogger(context: Record<string, unknown>) {
-  return logger.child(context);
+  return logger.child(context)
 }
-

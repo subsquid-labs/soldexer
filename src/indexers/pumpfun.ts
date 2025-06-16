@@ -1,12 +1,16 @@
-import path from 'node:path';
-import { ClickhouseState } from '@sqd-pipes/core';
-import { SolanaPumpfunTokensStream } from '../streams/pumpfun';
-import { NodeClickHouseClient } from '@clickhouse/client/dist/client';
+import path from 'node:path'
+import { NodeClickHouseClient } from '@clickhouse/client/dist/client'
+import { ClickhouseState } from '@sqd-pipes/core'
+import { IndexerFunction, PipeConfig } from 'src/main'
 import { ensureTables } from '../db/clickhouse'
-import { logger } from '../utils/logger';
-import { IndexerFunction, PipeConfig } from 'src/main';
+import { SolanaPumpfunTokensStream } from '../streams/pumpfun'
+import { logger } from '../utils/logger'
 
-export const pumpfunIndexer: IndexerFunction = async (portalUrl: string, clickhouse: NodeClickHouseClient, config: PipeConfig) => {
+export const pumpfunIndexer: IndexerFunction = async (
+  portalUrl: string,
+  clickhouse: NodeClickHouseClient,
+  config: PipeConfig,
+) => {
   const ds = new SolanaPumpfunTokensStream({
     portal: `${portalUrl}/datasets/solana-mainnet`,
     blockRange: {
@@ -18,9 +22,9 @@ export const pumpfunIndexer: IndexerFunction = async (portalUrl: string, clickho
       id: 'solana_pumpfun',
     }),
     logger,
-  });
+  })
 
-  await ensureTables(clickhouse, path.join(__dirname, '../db/sql/pumpfun.sql'));
+  await ensureTables(clickhouse, path.join(__dirname, '../db/sql/pumpfun.sql'))
 
   for await (const tokens of await ds.stream()) {
     await clickhouse.insert({
@@ -33,10 +37,8 @@ export const pumpfunIndexer: IndexerFunction = async (portalUrl: string, clickho
         metadata_uri: t.uri,
         timestamp: t.deployTime,
       })),
-    });
+    })
 
-    await ds.ack();
+    await ds.ack()
   }
 }
-
-

@@ -48,27 +48,20 @@
         "noUnsafeDeclarationMerging": "error"
       }
     },
-    "ignore": [
-      "dist/*",
-      "**/*.d.ts"
-    ]
+    "ignore": ["dist/*", "**/*.d.ts", "src/abi/*"]
   },
   "javascript": {
     "parser": {
       "unsafeParameterDecoratorsEnabled": true
     },
     "formatter": {
-      "quoteStyle": "single"
+      "quoteStyle": "single",
+      "semicolons": "asNeeded"
     }
   },
   "overrides": [
     {
-      "include": [
-        "*.ts",
-        "*.tsx",
-        "*.mts",
-        "*.cts"
-      ],
+      "include": ["*.ts", "*.tsx", "*.mts", "*.cts"],
       "linter": {
         "rules": {
           "correctness": {

@@ -1,10 +1,10 @@
-import { unit, struct, address, u64, string } from '@subsquid/borsh';
-import { instruction } from '../abi.support';
+import { address, string, struct, u64, unit } from '@subsquid/borsh'
+import { instruction } from '../abi.support'
 
 /**
  * Creates the global state.
  */
-export type Initialize = undefined;
+export type Initialize = undefined
 
 /**
  * Creates the global state.
@@ -19,18 +19,18 @@ export const initialize = instruction(
     systemProgram: 2,
   },
   unit,
-);
+)
 
 /**
  * Sets the global state parameters.
  */
 export interface SetParams {
-  feeRecipient: string;
-  initialVirtualTokenReserves: bigint;
-  initialVirtualSolReserves: bigint;
-  initialRealTokenReserves: bigint;
-  tokenTotalSupply: bigint;
-  feeBasisPoints: bigint;
+  feeRecipient: string
+  initialVirtualTokenReserves: bigint
+  initialVirtualSolReserves: bigint
+  initialRealTokenReserves: bigint
+  tokenTotalSupply: bigint
+  feeBasisPoints: bigint
 }
 
 /**
@@ -55,15 +55,15 @@ export const setParams = instruction(
     tokenTotalSupply: u64,
     feeBasisPoints: u64,
   }),
-);
+)
 
 /**
  * Creates a new coin and bonding curve.
  */
 export interface Create {
-  name: string;
-  symbol: string;
-  uri: string;
+  name: string
+  symbol: string
+  uri: string
 }
 
 /**
@@ -94,14 +94,14 @@ export const create = instruction(
     symbol: string,
     uri: string,
   }),
-);
+)
 
 /**
  * Buys tokens from a bonding curve.
  */
 export interface Buy {
-  amount: bigint;
-  maxSolCost: bigint;
+  amount: bigint
+  maxSolCost: bigint
 }
 
 /**
@@ -129,14 +129,14 @@ export const buy = instruction(
     amount: u64,
     maxSolCost: u64,
   }),
-);
+)
 
 /**
  * Sells tokens into a bonding curve.
  */
 export interface Sell {
-  amount: bigint;
-  minSolOutput: bigint;
+  amount: bigint
+  minSolOutput: bigint
 }
 
 /**
@@ -164,12 +164,12 @@ export const sell = instruction(
     amount: u64,
     minSolOutput: u64,
   }),
-);
+)
 
 /**
  * Allows the admin to withdraw liquidity for a migration once the bonding curve completes
  */
-export type Withdraw = undefined;
+export type Withdraw = undefined
 
 /**
  * Allows the admin to withdraw liquidity for a migration once the bonding curve completes
@@ -192,4 +192,4 @@ export const withdraw = instruction(
     program: 10,
   },
   unit,
-);
+)

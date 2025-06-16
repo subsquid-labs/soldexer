@@ -1,12 +1,16 @@
-import path from 'node:path';
-import { ClickhouseState } from '@sqd-pipes/core';
-import { ensureTables } from "../db/clickhouse";
-import { SolanaMetaplexStream } from '../streams/metaplex';
-import { logger } from '../utils';
-import { IndexerFunction, PipeConfig } from '../main';
-import { NodeClickHouseClient } from '@clickhouse/client/dist/client';
+import path from 'node:path'
+import { NodeClickHouseClient } from '@clickhouse/client/dist/client'
+import { ClickhouseState } from '@sqd-pipes/core'
+import { ensureTables } from '../db/clickhouse'
+import { IndexerFunction, PipeConfig } from '../main'
+import { SolanaMetaplexStream } from '../streams/metaplex'
+import { logger } from '../utils'
 
-export const metaplexIndexer: IndexerFunction = async (portalUrl: string, clickhouse: NodeClickHouseClient, config: PipeConfig) => {
+export const metaplexIndexer: IndexerFunction = async (
+  portalUrl: string,
+  clickhouse: NodeClickHouseClient,
+  config: PipeConfig,
+) => {
   const ds = new SolanaMetaplexStream({
     portal: `${portalUrl}/datasets/solana-mainnet`,
     blockRange: {
@@ -17,10 +21,10 @@ export const metaplexIndexer: IndexerFunction = async (portalUrl: string, clickh
       table: 'solana_sync_status',
       id: 'metaplex_metadata',
     }),
-    logger
-  });
+    logger,
+  })
 
-  await ensureTables(clickhouse, path.join(__dirname, '../db/sql/metaplex.sql'));
+  await ensureTables(clickhouse, path.join(__dirname, '../db/sql/metaplex.sql'))
 
   for await (const mints of await ds.stream()) {
     await clickhouse.insert({
@@ -37,8 +41,8 @@ export const metaplexIndexer: IndexerFunction = async (portalUrl: string, clickh
         transaction_hash: m.transaction.hash,
         timestamp: m.block.timestamp,
       })),
-    });
+    })
 
-    await ds.ack();
+    await ds.ack()
   }
 }
