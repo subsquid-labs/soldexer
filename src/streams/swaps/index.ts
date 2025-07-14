@@ -5,12 +5,21 @@ import * as meteora_dlmm from '../../abi/meteora_dlmm/index'
 import * as whirlpool from '../../abi/orca_whirlpool/index'
 import * as raydium_cpmm from '../../abi/raydium_cpmm/index'
 import * as raydium_clmm from '../../abi/raydium_clmm/index'
+import * as byreal_clmm from '../../abi/byreal_clmm/index'
+import * as pancake_clmm from '../../abi/pancake_clmm/index'
 import { getTransactionAccount, getTransactionHash } from '../../utils'
 import { handleMeteoraDamm, handleMeteoraDlmm } from './handlers/meteora'
 import { handleWhirlpool } from './handlers/orca'
 import { handleRaydiumClmm, handleRaydiumCpmm } from './handlers/raydium'
 
-export type SwapType = 'orca_whirlpool' | 'meteora_damm' | 'meteora_dlmm' | 'raydium_clmm' | 'raydium_cpmm'
+export type SwapType =
+  | 'orca_whirlpool'
+  | 'meteora_damm'
+  | 'meteora_dlmm'
+  | 'raydium_clmm'
+  | 'raydium_cpmm'
+  | 'byreal_clmm'
+  | 'pancake_clmm'
 
 export interface TokenAmount {
   amount: bigint;
@@ -149,10 +158,25 @@ export class SolanaSwapsStream extends PortalAbstractStream<
           case 'raydium_cpmm':
             return {
               programId: [raydium_cpmm.programId],
-              d1: [
-                raydium_cpmm.instructions.swapBaseInput.d8,
-                raydium_cpmm.instructions.swapBaseOutput.d8
-              ],
+              d1: [raydium_cpmm.instructions.swapBaseInput.d8, raydium_cpmm.instructions.swapBaseOutput.d8],
+              isCommitted: true,
+              innerInstructions: true,
+              transaction: true,
+              transactionTokenBalances: true,
+            }
+          case 'byreal_clmm':
+            return {
+              programId: [byreal_clmm.programId],
+              d8: [byreal_clmm.instructions.swap.d8, byreal_clmm.instructions.swapV2.d8],
+              isCommitted: true,
+              innerInstructions: true,
+              transaction: true,
+              transactionTokenBalances: true,
+            }
+          case 'pancake_clmm':
+            return {
+              programId: [pancake_clmm.programId],
+              d8: [pancake_clmm.instructions.swap.d8, pancake_clmm.instructions.swapV2.d8],
               isCommitted: true,
               innerInstructions: true,
               transaction: true,
@@ -210,6 +234,22 @@ export class SolanaSwapsStream extends PortalAbstractStream<
                     case raydium_clmm.instructions.swapV2.d8:
                     case raydium_clmm.instructions.swapRouterBaseIn.d8:
                       swap = handleRaydiumClmm(ins, block)
+                      break
+                  }
+                  break
+                case byreal_clmm.programId:
+                  switch (getInstructionDescriptor(ins)) {
+                    case byreal_clmm.instructions.swap.d8:
+                    case byreal_clmm.instructions.swapV2.d8:
+                      swap = handleRaydiumClmm(ins, block, 'byreal_clmm')
+                      break
+                  }
+                  break
+                case pancake_clmm.programId:
+                  switch (getInstructionDescriptor(ins)) {
+                    case pancake_clmm.instructions.swap.d8:
+                    case pancake_clmm.instructions.swapV2.d8:
+                      swap = handleRaydiumClmm(ins, block, 'pancake_clmm')
                       break
                   }
                   break

@@ -10,9 +10,15 @@ import {
 } from '../../../../utils';
 import * as raydiumClmm from '../../../../abi/raydium_clmm';
 import type { SwapEvent } from '../../../../abi/raydium_clmm/types';
-import type { SolanaSwapTransfer, TokenAmount } from '../../';
+import type { SolanaSwapTransfer, SwapType, TokenAmount } from '../../';
 
-export function handleRaydiumClmm(ins: Instruction, block: Block): SolanaSwapTransfer {
+type RaydiumForks = Extract<SwapType, 'raydium_clmm' | 'byreal_clmm' | 'pancake_clmm'>
+
+export function handleRaydiumClmm(
+  ins: Instruction,
+  block: Block,
+  fork: RaydiumForks = 'raydium_clmm',
+): SolanaSwapTransfer {
   const {
     accounts: { poolState: poolAddress, inputVault, outputVault },
   } = decodeSwap(ins);
