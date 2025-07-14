@@ -22,45 +22,45 @@ export type SwapType =
   | 'pancake_clmm'
 
 export interface TokenAmount {
-  amount: bigint;
-  mint: string;
-  decimals: number;
+  amount: bigint
+  mint: string
+  decimals: number
 }
 
 export type SolanaSwap = {
-  id: string;
-  type: SwapType;
-  account: string;
-  transaction: { hash: string; index: number };
-  input: TokenAmount;
-  output: TokenAmount;
-  instruction: { address: number[] };
-  block: BlockRef;
-  timestamp: Date;
-  poolAddress: string | null;
-  tokenA: string | null;
-  tokenB: string | null;
-  slippage: number | null;
+  id: string
+  type: SwapType
+  account: string
+  transaction: { hash: string; index: number }
+  input: TokenAmount
+  output: TokenAmount
+  instruction: { address: number[] }
+  block: BlockRef
+  timestamp: Date
+  poolAddress: string | null
+  tokenA: string | null
+  tokenB: string | null
+  slippage: number | null
   reserves: {
-    tokenA: TokenAmount;
-    tokenB: TokenAmount;
-  } | null;
-};
+    tokenA: TokenAmount
+    tokenB: TokenAmount
+  } | null
+}
 
 export type SolanaSwapTransfer = {
-  type: SwapType;
-  account: string;
-  in: { amount: bigint; token: { postMint: string; postDecimals: number } };
-  out: { amount: bigint; token: { postMint: string; postDecimals: number } };
-  poolAddress: string | null;
-  tokenA: string | null;
-  tokenB: string | null;
-  slippage: number | null;
+  type: SwapType
+  account: string
+  in: { amount: bigint; token: { postMint: string; postDecimals: number } }
+  out: { amount: bigint; token: { postMint: string; postDecimals: number } }
+  poolAddress: string | null
+  tokenA: string | null
+  tokenB: string | null
+  slippage: number | null
   reserves: {
-    tokenA: TokenAmount;
-    tokenB: TokenAmount;
-  } | null;
-};
+    tokenA: TokenAmount
+    tokenB: TokenAmount
+  } | null
+}
 
 export class SolanaSwapsStream extends PortalAbstractStream<
   SolanaSwap,
@@ -72,11 +72,17 @@ export class SolanaSwapsStream extends PortalAbstractStream<
   async stream(): Promise<ReadableStream<SolanaSwap[]>> {
     const { args } = this.options
 
-    const types: SwapType[] = args?.type || ['orca_whirlpool', 'meteora_damm', 'meteora_dlmm', 'raydium_clmm', 'raydium_cpmm']
+    const types: SwapType[] = args?.type || [
+      'orca_whirlpool',
+      'meteora_damm',
+      'meteora_dlmm',
+      'raydium_clmm',
+      'raydium_cpmm',
+    ]
 
     const source = await this.getStream({
       type: 'solana',
-            fields: {
+      fields: {
         block: {
           number: true,
           hash: true,
@@ -132,6 +138,7 @@ export class SolanaSwapsStream extends PortalAbstractStream<
               innerInstructions: true,
               transaction: true,
               transactionTokenBalances: true,
+              logs: true,
             }
           case 'meteora_dlmm':
             return {
@@ -141,6 +148,7 @@ export class SolanaSwapsStream extends PortalAbstractStream<
               innerInstructions: true,
               transaction: true,
               transactionTokenBalances: true,
+              logs: true,
             }
           case 'raydium_clmm':
             return {
@@ -154,6 +162,7 @@ export class SolanaSwapsStream extends PortalAbstractStream<
               innerInstructions: true,
               transaction: true,
               transactionTokenBalances: true,
+              logs: true,
             }
           case 'raydium_cpmm':
             return {
@@ -163,6 +172,7 @@ export class SolanaSwapsStream extends PortalAbstractStream<
               innerInstructions: true,
               transaction: true,
               transactionTokenBalances: true,
+              logs: true,
             }
           case 'byreal_clmm':
             return {
@@ -172,6 +182,7 @@ export class SolanaSwapsStream extends PortalAbstractStream<
               innerInstructions: true,
               transaction: true,
               transactionTokenBalances: true,
+              logs: true,
             }
           case 'pancake_clmm':
             return {
@@ -181,6 +192,7 @@ export class SolanaSwapsStream extends PortalAbstractStream<
               innerInstructions: true,
               transaction: true,
               transactionTokenBalances: true,
+              logs: true,
             }
         }
       }),
@@ -298,7 +310,7 @@ export class SolanaSwapsStream extends PortalAbstractStream<
                 tokenB: swap.tokenB,
                 slippage: swap.slippage,
                 reserves: swap.reserves,
-              });
+              })
             }
 
             return swaps
