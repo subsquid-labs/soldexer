@@ -123,6 +123,7 @@ export class SolanaSwapsStream extends PortalAbstractStream<
               innerInstructions: true,
               transaction: true,
               transactionTokenBalances: true,
+              logs: true,
             }
           case 'meteora_dlmm':
             return {
@@ -132,6 +133,7 @@ export class SolanaSwapsStream extends PortalAbstractStream<
               innerInstructions: true,
               transaction: true,
               transactionTokenBalances: true,
+              logs: true,
             }
           case 'raydium_clmm':
             return {
@@ -145,18 +147,17 @@ export class SolanaSwapsStream extends PortalAbstractStream<
               innerInstructions: true,
               transaction: true,
               transactionTokenBalances: true,
+              logs: true,
             }
           case 'raydium_cpmm':
             return {
               programId: [raydium_cpmm.programId],
-              d1: [
-                raydium_cpmm.instructions.swapBaseInput.d8,
-                raydium_cpmm.instructions.swapBaseOutput.d8
-              ],
+              d1: [raydium_cpmm.instructions.swapBaseInput.d8, raydium_cpmm.instructions.swapBaseOutput.d8],
               isCommitted: true,
               innerInstructions: true,
               transaction: true,
               transactionTokenBalances: true,
+              logs: true,
             }
         }
       }),
