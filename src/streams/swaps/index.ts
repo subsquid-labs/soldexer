@@ -3,41 +3,55 @@ import { getInstructionDescriptor } from '@subsquid/solana-stream'
 import * as meteora_damm from '../../abi/meteora_damm/index'
 import * as meteora_dlmm from '../../abi/meteora_dlmm/index'
 import * as whirlpool from '../../abi/orca_whirlpool/index'
-import * as raydium_amm from '../../abi/raydium_amm/index'
+import * as raydium_cpmm from '../../abi/raydium_cpmm/index'
 import * as raydium_clmm from '../../abi/raydium_clmm/index'
-import { getInstructionD1, getTransactionHash } from '../../utils'
-import { handleMeteoraDamm, handleMeteoraDlmm } from './handle_meteora'
-import { handleWhirlpool } from './handle_orca'
-import { handleRaydiumAmm, handleRaydiumClmm } from './handle_raydium'
+import { getTransactionAccount, getTransactionHash } from '../../utils'
+import { handleMeteoraDamm, handleMeteoraDlmm } from './handlers/meteora'
+import { handleWhirlpool } from './handlers/orca'
+import { handleRaydiumClmm, handleRaydiumCpmm } from './handlers/raydium'
 
-export type SwapType = 'orca_whirlpool' | 'meteora_damm' | 'meteora_dlmm' | 'raydium_clmm' | 'raydium_amm'
+export type SwapType = 'orca_whirlpool' | 'meteora_damm' | 'meteora_dlmm' | 'raydium_clmm' | 'raydium_cpmm'
+
+export interface TokenAmount {
+  amount: bigint;
+  mint: string;
+  decimals: number;
+}
 
 export type SolanaSwap = {
-  id: string
-  type: SwapType
-  account: string
-  transaction: { hash: string; index: number }
-  input: {
-    amount: bigint
-    mint: string
-    decimals: number
-  }
-  output: {
-    amount: bigint
-    mint: string
-    decimals: number
-  }
-  instruction: { address: number[] }
-  block: BlockRef
-  timestamp: Date
-}
+  id: string;
+  type: SwapType;
+  account: string;
+  transaction: { hash: string; index: number };
+  input: TokenAmount;
+  output: TokenAmount;
+  instruction: { address: number[] };
+  block: BlockRef;
+  timestamp: Date;
+  poolAddress: string | null;
+  tokenA: string | null;
+  tokenB: string | null;
+  slippage: number | null;
+  reserves: {
+    tokenA: TokenAmount;
+    tokenB: TokenAmount;
+  } | null;
+};
 
 export type SolanaSwapTransfer = {
-  type: SwapType
-  account: string
-  in: { amount: bigint; token: { postMint: string; postDecimals: number } }
-  out: { amount: bigint; token: { postMint: string; postDecimals: number } }
-}
+  type: SwapType;
+  account: string;
+  in: { amount: bigint; token: { postMint: string; postDecimals: number } };
+  out: { amount: bigint; token: { postMint: string; postDecimals: number } };
+  poolAddress: string | null;
+  tokenA: string | null;
+  tokenB: string | null;
+  slippage: number | null;
+  reserves: {
+    tokenA: TokenAmount;
+    tokenB: TokenAmount;
+  } | null;
+};
 
 export class SolanaSwapsStream extends PortalAbstractStream<
   SolanaSwap,
@@ -49,11 +63,11 @@ export class SolanaSwapsStream extends PortalAbstractStream<
   async stream(): Promise<ReadableStream<SolanaSwap[]>> {
     const { args } = this.options
 
-    const types = args?.type || ['orca_whirlpool', 'meteora_damm', 'meteora_dlmm', 'raydium_clmm', 'raydium_amm']
+    const types: SwapType[] = args?.type || ['orca_whirlpool', 'meteora_damm', 'meteora_dlmm', 'raydium_clmm', 'raydium_cpmm']
 
     const source = await this.getStream({
       type: 'solana',
-      fields: {
+            fields: {
         block: {
           number: true,
           hash: true,
@@ -62,6 +76,8 @@ export class SolanaSwapsStream extends PortalAbstractStream<
         transaction: {
           transactionIndex: true,
           signatures: true,
+          accountKeys: true,
+          loadedAddresses: true,
         },
         instruction: {
           transactionIndex: true,
@@ -70,18 +86,21 @@ export class SolanaSwapsStream extends PortalAbstractStream<
           programId: true,
           accounts: true,
         },
-        log: {
-          transactionIndex: true,
-          instructionAddress: true,
-          logIndex: true,
-          message: true,
-        },
         tokenBalance: {
           transactionIndex: true,
           account: true,
           preMint: true,
           postMint: true,
+          preAmount: true,
+          postAmount: true,
+          preDecimals: true,
           postDecimals: true,
+        },
+        log: {
+          transactionIndex: true,
+          instructionAddress: true,
+          message: true,
+          logIndex: true,
         },
       },
       instructions: types.map((type) => {
@@ -127,10 +146,13 @@ export class SolanaSwapsStream extends PortalAbstractStream<
               transaction: true,
               transactionTokenBalances: true,
             }
-          case 'raydium_amm':
+          case 'raydium_cpmm':
             return {
-              programId: [raydium_amm.programId],
-              d1: [raydium_amm.instructions.swapBaseIn.d1, raydium_amm.instructions.swapBaseOut.d1],
+              programId: [raydium_cpmm.programId],
+              d1: [
+                raydium_cpmm.instructions.swapBaseInput.d8,
+                raydium_cpmm.instructions.swapBaseOutput.d8
+              ],
               isCommitted: true,
               innerInstructions: true,
               transaction: true,
@@ -174,16 +196,16 @@ export class SolanaSwapsStream extends PortalAbstractStream<
                       break
                   }
                   break
-                case raydium_amm.programId:
-                  switch (getInstructionD1(ins)) {
-                    case raydium_amm.instructions.swapBaseIn.d1:
-                    case raydium_amm.instructions.swapBaseOut.d1:
-                      swap = handleRaydiumAmm(ins, block)
+                case raydium_cpmm.programId:
+                  switch (getInstructionDescriptor(ins)) {
+                    case raydium_cpmm.instructions.swapBaseInput.d8:
+                    case raydium_cpmm.instructions.swapBaseOutput.d8:
+                      swap = handleRaydiumCpmm(ins, block)
                       break
                   }
                   break
                 case raydium_clmm.programId:
-                  switch (getInstructionD1(ins)) {
+                  switch (getInstructionDescriptor(ins)) {
                     case raydium_clmm.instructions.swap.d8:
                     case raydium_clmm.instructions.swapV2.d8:
                     case raydium_clmm.instructions.swapRouterBaseIn.d8:
@@ -225,13 +247,18 @@ export class SolanaSwapsStream extends PortalAbstractStream<
                   mint: swap.out.token.postMint,
                   decimals: swap.out.token.postDecimals,
                 },
-                account: swap.account,
+                account: getTransactionAccount(ins, block),
                 transaction: {
                   hash: txHash,
                   index: ins.transactionIndex,
                 },
                 timestamp: new Date(block.header.timestamp * 1000),
-              })
+                poolAddress: swap.poolAddress,
+                tokenA: swap.tokenA,
+                tokenB: swap.tokenB,
+                slippage: swap.slippage,
+                reserves: swap.reserves,
+              });
             }
 
             return swaps

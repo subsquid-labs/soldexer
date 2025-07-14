@@ -73,8 +73,10 @@ export const swapsIndexer: IndexerFunction = async (
           const tokenA = !needTokenSwap ? s.input : s.output
           const tokenB = !needTokenSwap ? s.output : s.input
 
-          const amountA = ((needTokenSwap ? 1 : -1) * Number(tokenA.amount)) / 10 ** tokenA.decimals
-          const amountB = ((needTokenSwap ? -1 : 1) * Number(tokenB.amount)) / 10 ** tokenB.decimals
+          const tokenAr =
+            s.reserves?.tokenA.mint === tokenA.mint ? s.reserves?.tokenA : s.reserves?.tokenB;
+          const tokenBr =
+            s.reserves?.tokenB.mint === tokenB.mint ? s.reserves?.tokenB : s.reserves?.tokenA;
 
           return {
             dex: s.type,
@@ -85,11 +87,21 @@ export const swapsIndexer: IndexerFunction = async (
             account: s.account,
             token_a: tokenA.mint,
             token_b: tokenB.mint,
-            amount_a: amountA.toString(),
-            amount_b: amountB.toString(),
+            amount_a: (
+              ((needTokenSwap ? -1 : 1) * Number(tokenA.amount)) /
+              10 ** tokenA.decimals
+            ).toString(),
+            amount_b: (
+              ((needTokenSwap ? 1 : -1) * Number(tokenB.amount)) /
+              10 ** tokenB.decimals
+            ).toString(),
             timestamp: s.timestamp,
+            pool_address: s.poolAddress,
+            slippage: s.slippage,
+            pool_token_a_reserve: Number(tokenAr?.amount) / 10 ** tokenA.decimals,
+            pool_token_b_reserve: Number(tokenBr?.amount) / 10 ** tokenB.decimals,
             sign: 1,
-          }
+          };
         }),
       format: 'JSONEachRow',
     })
