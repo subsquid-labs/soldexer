@@ -3,12 +3,12 @@ import path from 'node:path'
 import { NodeClickHouseClient } from '@clickhouse/client/dist/client'
 import { createClickhouseClient } from './db/clickhouse'
 import { metaplexIndexer } from './indexers/metaplex'
-import { pumpfunIndexer } from './indexers/pumpfun'
+import { pumpfunBondingCurveSwapsIndexer, pumpfunTokenCreationIndexer } from './indexers/pumpfun'
 import { swapsIndexer } from './indexers/swaps'
 import { logger } from './utils'
 import { retry } from './utils/retry'
 
-type Pipes = 'swaps' | 'metaplex' | 'pumpfun'
+type Pipes = 'swaps' | 'metaplex' | 'pumpfun.token-creation' | 'pumpfun.bonding-curve-swaps'
 
 export interface PipeConfig {
   fromBlock: number
@@ -33,7 +33,8 @@ export type IndexerFunction = (portalUrl: string, clickhouse: NodeClickHouseClie
 const indexersMap: Record<Pipes, IndexerFunction> = {
   swaps: swapsIndexer,
   metaplex: metaplexIndexer,
-  pumpfun: pumpfunIndexer,
+  'pumpfun.token-creation': pumpfunTokenCreationIndexer,
+  'pumpfun.bonding-curve-swaps': pumpfunBondingCurveSwapsIndexer,
 }
 
 async function main() {

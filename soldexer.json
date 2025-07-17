@@ -13,7 +13,10 @@
     "metaplex": {
       "fromBlock": 332557468
     },
-    "pumpfun": {
+    "pumpfun.token-creation": {
+      "fromBlock": 332557468
+    },
+    "pumpfun.bonding-curve-swaps": {
       "fromBlock": 332557468
     }
   }

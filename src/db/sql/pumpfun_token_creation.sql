@@ -12,7 +12,7 @@ PARTITION BY toYYYYMM(creation_time)
 ORDER BY (creation_time, symbol);
 
 -- Create materialized view for daily token creation counts
-CREATE MATERIALIZED VIEW IF NOT EXISTS pumpfun_tokens_daily
+CREATE MATERIALIZED VIEW IF NOT EXISTS solana_pumpfun_tokens_daily
 ENGINE = AggregatingMergeTree()
 PARTITION BY toYYYYMM(creation_time)
 ORDER BY (creation_time)
