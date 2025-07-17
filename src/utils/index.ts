@@ -211,5 +211,3 @@ export function getTransaction(ins: Instruction, block: Block) {
 
   return tx;
 }
-
-

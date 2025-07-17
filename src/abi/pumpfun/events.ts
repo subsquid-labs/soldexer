@@ -2,6 +2,7 @@ import { event } from '../abi.support'
 import {
   CompleteEvent as CompleteEvent_,
   CreateEvent as CreateEvent_,
+  SellEvent as SellEvent_,
   SetParamsEvent as SetParamsEvent_,
   TradeEvent as TradeEvent_,
 } from './types'

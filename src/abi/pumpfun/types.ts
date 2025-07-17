@@ -67,6 +67,8 @@ export interface TradeEvent {
   timestamp: bigint
   virtualSolReserves: bigint
   virtualTokenReserves: bigint
+  realSolReserves: bigint
+  realTokenReserves: bigint
 }
 
 export const TradeEvent: Codec<TradeEvent> = struct({
@@ -78,6 +80,8 @@ export const TradeEvent: Codec<TradeEvent> = struct({
   timestamp: i64,
   virtualSolReserves: u64,
   virtualTokenReserves: u64,
+  realSolReserves: u64,
+  realTokenReserves: u64,
 })
 
 export interface CompleteEvent {
@@ -110,4 +114,30 @@ export const SetParamsEvent: Codec<SetParamsEvent> = struct({
   initialRealTokenReserves: u64,
   tokenTotalSupply: u64,
   feeBasisPoints: u64,
+})
+
+export interface SellEvent {
+  mint: string
+  solAmount: bigint
+  tokenAmount: bigint
+  isBuy: boolean
+  user: string
+  timestamp: bigint
+  virtualSolReserves: bigint
+  virtualTokenReserves: bigint
+  realSolReserves: bigint
+  realTokenReserves: bigint
+}
+
+export const SellEvent: Codec<SellEvent> = struct({
+  mint: address,
+  solAmount: u64,
+  tokenAmount: u64,
+  isBuy: bool,
+  user: address,
+  timestamp: u64,
+  virtualSolReserves: u64,
+  virtualTokenReserves: u64,
+  realSolReserves: u64,
+  realTokenReserves: u64,
 })
