@@ -35,7 +35,7 @@ export const pumpfunTokenCreationIndexer: IndexerFunction = async (
         symbol: t.symbol,
         address: t.address,
         metadata_uri: t.uri,
-        timestamp: t.deployTime,
+        creation_time: t.deployTime,
       })),
     })
 
